@@ -1,5 +1,6 @@
-import twitter
+﻿import twitter
 import sys; sys.stdout.encoding; sys.stderr.encoding
+import json
 
 
 CONSUMER_KEY = 'pIL4NYPIiEJu2KatZsNtLnIVB'
@@ -20,6 +21,29 @@ US_WOE_ID = 23424977
 # to the URL itself as a special case keyword argument.
 world_trends = twitter_api.trends.place(_id=WORLD_WOE_ID)
 us_trends = twitter_api.trends.place(_id=US_WOE_ID)
-print (us_trends)
-print
-print (ascii(world_trends))
+#print (ascii(us_trends))
+#print
+#print (ascii(world_trends))
+
+#print (json.dumps(us_trends, indent=1))
+#print
+#print (json.dumps(world_trends, indent=1))
+
+world_trends_set = set([trend['name']
+                        for trend in world_trends[0]['trends']])
+
+us_trends_set = set([trend['name']
+                        for trend in us_trends[0]['trends']])
+
+common_trends = world_trends_set.intersection(us_trends_set)
+
+#print (common_trends)
+
+q = '#Microsoft'
+
+count = 100
+
+search_results = twitter_api.search.tweets(q=q, count=count)
+statuses = search_results['statuses']
+
+print (json.dumps(statuses, indent=1))
